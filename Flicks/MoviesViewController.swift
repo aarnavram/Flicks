@@ -13,23 +13,55 @@ import MBProgressHUD
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    
     var movies: [NSDictionary]?
+    let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 600, height: 50))
+    let refreshControl = UIRefreshControl()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.isHidden = true
+
         // Do any additional setup after loading the view.
-        let refreshControl = UIRefreshControl()
+        
+        confirgureErrorButton()
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
         refreshControlAction(refreshControl: refreshControl)
+
+        
     }
+    
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func confirgureErrorButton() {
+        self.view.addSubview(errorBtn)
+        NSLayoutConstraint(item: errorBtn, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leadingMargin, multiplier: 1, constant: -20).isActive = true
+        NSLayoutConstraint(item: errorBtn, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailingMargin, multiplier: 1, constant: 20).isActive = true
+        errorBtn.translatesAutoresizingMaskIntoConstraints = false
+        errorBtn.backgroundColor = UIColor.black
+        errorBtn.setTitle("⚠️ Network Error", for: .normal)
+        errorBtn.isHidden = true
+        errorBtn.isUserInteractionEnabled = true
+        errorBtn.addTarget(self, action: #selector(buttonCall), for: UIControlEvents.touchUpInside)
+    }
+    
+    func buttonCall() {
+        refreshControlAction(refreshControl: refreshControl)
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hideHUD), userInfo: nil, repeats: false)
+        
+    }
+    
+    func hideHUD() {
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -43,12 +75,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as? [NSDictionary]
+                    self.errorBtn.isHidden = true
                     self.tableView.reloadData()
+                    self.tableView.isHidden = false
                     refreshControl.endRefreshing()
-                    MBProgressHUD.hide(for: self.view, animated: true)
                 }
+            } else {
+                self.errorBtn.isHidden = false
+                refreshControl.endRefreshing()
             }
         }
+        MBProgressHUD.hide(for: self.view, animated: true)
         task.resume()
     }
     

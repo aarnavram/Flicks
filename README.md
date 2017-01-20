@@ -10,8 +10,8 @@ The following **required** functionality is complete:
 
 - [√] User can view a list of movies currently playing in theaters from The Movie Database.
 - [√] Poster images are loaded using the UIImageView category in the AFNetworking library.
-- [] User sees a loading state while waiting for the movies API.
-- [ ] User can pull to refresh the movie list.
+- [√] User sees a loading state while waiting for the movies API.
+- [√] User can pull to refresh the movie list.
 
 The following **optional** features are implemented:
 

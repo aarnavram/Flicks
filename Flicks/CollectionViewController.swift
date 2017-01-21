@@ -1,40 +1,34 @@
 //
-//  MoviesViewController.swift
+//  CollectionViewController.swift
 //  Flicks
 //
-//  Created by Aarnav Ram on 19/01/17.
+//  Created by Aarnav Ram on 20/01/17.
 //  Copyright © 2017 Aarnav Ram. All rights reserved.
 //
 
 import UIKit
-import AFNetworking
 import MBProgressHUD
+import AFNetworking
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    @IBOutlet weak var tableView: UITableView!
-    var movies: [NSDictionary]?
+class CollectionViewController: UIViewController {
+    
     let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 600, height: 50))
     let refreshControl = UIRefreshControl()
-
+    var movies:[NSDictionary]?
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.isHidden = true
-
-        // Do any additional setup after loading the view.
-        
+        collectionView.dataSource = self
         confirgureErrorButton()
+        collectionView.isHidden = true
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
-        tableView.insertSubview(refreshControl, at: 0)
+        collectionView.insertSubview(refreshControl, at: 0)
         refreshControlAction(refreshControl: refreshControl)
+        configureLayout()
+        // Do any additional setup after loading the view.
 
-        
     }
-    
-
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -60,8 +54,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
-    func hideHUD() {
-        MBProgressHUD.hide(for: self.view, animated: true)
+    func configureLayout() {
+        
+        let leftAndRightPaddings: CGFloat = 5
+        let numberOfItemsPerRow: CGFloat = 2
+        
+        let bounds = UIScreen.main.bounds
+        let width = (bounds.size.width - leftAndRightPaddings*(numberOfItemsPerRow)) / numberOfItemsPerRow
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let size = CGSize(width: width, height: 1.5*width)
+        layout.itemSize = size
     }
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -76,8 +78,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as? [NSDictionary]
                     self.errorBtn.isHidden = true
-                    self.tableView.reloadData()
-                    self.tableView.isHidden = false
+                    self.collectionView.reloadData()
+                    self.collectionView.isHidden = false
                     refreshControl.endRefreshing()
                 }
             } else {
@@ -89,35 +91,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
     
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
-            return movies.count
-        } else {
-            return 0
-        }
+    func hideHUD() {
+        MBProgressHUD.hide(for: self.view, animated: true)
     }
     
-   // override var prefersStatusBarHidden: Bool {
-     //   return true
-    //}
-    
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
-        
-        let movie = movies![indexPath.row]
-        let title = movie["title"] as! String
-        let description = movie["overview"] as! String
-        let baseUrl = "https://image.tmdb.org/t/p/w342"
-        let imageUrl = movie["poster_path"] as! String
-        
-        let fullUrl = URL(string: baseUrl + imageUrl)
-        
-    
-        cell.titleLabel.text = title
-        cell.descrLabel.text = description
-        cell.posterView.setImageWith(fullUrl!)
-        return cell
-    }
 
     /*
     // MARK: - Navigation
@@ -129,4 +106,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     */
 
+}
+
+extension CollectionViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let movies = movies {
+            return movies.count
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
+        let movie = movies![indexPath.row]
+        let baseURL = "https://image.tmdb.org/t/p/w342"
+        let imageURL = movie["poster_path"] as! String
+        let fullURL = URL(string: baseURL + imageURL)
+        cell.posterImage.setImageWith(fullURL!)
+        return cell
+    }
 }

@@ -29,7 +29,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
 
         super.viewDidLoad()
-        
+                
         configureSearchBar()
         collectionView.dataSource = self
         collectionView.isHidden = true

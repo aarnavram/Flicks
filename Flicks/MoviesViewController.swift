@@ -10,16 +10,18 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [NSDictionary]?
+    var filteredMovies: [NSDictionary]?
     let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 65, width: 600, height: 50))
     let refreshControl = UIRefreshControl()
     let refreshControlTwo = UIRefreshControl()
     let defaults = UserDefaults.standard
+    let searchBar = UISearchBar()
 
     @IBOutlet weak var changeViewButton: UIBarButtonItem!
     
@@ -28,6 +30,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         super.viewDidLoad()
         
+        configureSearchBar()
         collectionView.dataSource = self
         collectionView.isHidden = true
         tableView.dataSource = self
@@ -65,6 +68,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
 
+    @IBAction func whenViewTapped(_ sender: AnyObject) {
+        self.searchBar.endEditing(true)
+    }
+    
+    
+    func configureSearchBar() {
+        searchBar.delegate = self
+        searchBar.placeholder = "Search for a movie"
+        searchBar.showsCancelButton = false
+        self.navigationItem.titleView = searchBar
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -124,6 +138,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as? [NSDictionary]
+                    self.filteredMovies = NSArray(array: self.movies!, copyItems: true) as! [NSDictionary]
+                    self.filteredMovies = self.movies
                     self.errorBtn.isHidden = true
                     self.tableView.reloadData()
                     self.collectionView.reloadData()
@@ -146,11 +162,31 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
+        if let movies = filteredMovies { //changed to filteredMovies
             return movies.count
         } else {
             return 0
         }
+    }
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        let results:[NSDictionary]?
+        if !searchText.isEmpty {
+            results = self.movies?.filter({ movie in
+                if let movieTitle = movie["title"] as? String {
+                    return movieTitle.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+                }
+                return false
+            })
+        } else {
+            results = self.movies
+        }
+        filteredMovies = NSArray(array: results!) as! [NSDictionary]
+        tableView.reloadData()
+        collectionView.reloadData()
+        
     }
     
    // override var prefersStatusBarHidden: Bool {
@@ -160,7 +196,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-        let movie = movies![indexPath.row]
+        //let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         let title = movie["title"] as! String
         let description = movie["overview"] as! String
         let baseUrl = "https://image.tmdb.org/t/p/w342"
@@ -224,7 +261,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
 extension MoviesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let movies = movies {
+        if let movies = filteredMovies {
             return movies.count
         } else {
             return 0
@@ -233,7 +270,7 @@ extension MoviesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
         let imageURL = movie["poster_path"] as! String
         let fullURL = baseURL + imageURL

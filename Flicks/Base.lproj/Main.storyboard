@@ -101,6 +101,7 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="D0p-Hw-6zV" secondAttribute="bottom" id="6ea-Ed-U83"/>
                             <constraint firstItem="ke3-fV-z84" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="MQt-0Y-yXQ"/>
@@ -111,6 +112,9 @@
                             <constraint firstAttribute="trailing" secondItem="ke3-fV-z84" secondAttribute="trailing" id="lON-K6-A2b"/>
                             <constraint firstItem="ke3-fV-z84" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="qNs-po-vS4"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Zfg-p3-fNV" appends="YES" id="LPe-xk-Vfr"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Flicks" id="hHa-dp-XMC">
                         <barButtonItem key="leftBarButtonItem" image="grid" id="Od2-Tc-cPT">
@@ -127,6 +131,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Zfg-p3-fNV">
+                    <connections>
+                        <action selector="whenViewTapped:" destination="BYZ-38-t0r" id="XVC-xG-3cy"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="972" y="37.331334332833585"/>
         </scene>

@@ -16,7 +16,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [NSDictionary]?
-    let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 600, height: 50))
+    let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 65, width: 600, height: 50))
     let refreshControl = UIRefreshControl()
     let refreshControlTwo = UIRefreshControl()
     let defaults = UserDefaults.standard
@@ -58,7 +58,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 changeViewButton.image = UIImage(named: "list")
             }
         } else {
-            defaults.set(0, forKey: "currentView")
+            defaults.set(1, forKey: "currentView")
         }
         
         
@@ -77,12 +77,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             defaults.set(1, forKey: "currentView")
             changeViewButton.image = UIImage(named: "list")
             buttonCall()
-            print("changed")
         } else {
             defaults.set(0, forKey: "currentView")
             changeViewButton.image = UIImage(named: "grid")
             buttonCall()
-            print("Changed")
         }
     }
     
@@ -91,6 +89,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.view.addSubview(errorBtn)
         NSLayoutConstraint(item: errorBtn, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leadingMargin, multiplier: 1, constant: -20).isActive = true
         NSLayoutConstraint(item: errorBtn, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailingMargin, multiplier: 1, constant: 20).isActive = true
+        NSLayoutConstraint(item: errorBtn, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .topMargin, multiplier: 1, constant: 65).isActive = true
         errorBtn.translatesAutoresizingMaskIntoConstraints = false
         errorBtn.backgroundColor = UIColor.black
         errorBtn.setTitle("⚠️ Network Error", for: .normal)
@@ -167,12 +166,35 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let baseUrl = "https://image.tmdb.org/t/p/w342"
         let imageUrl = movie["poster_path"] as! String
         
-        let fullUrl = URL(string: baseUrl + imageUrl)
+        let fullUrl = baseUrl + imageUrl
+        let imageRequest = URLRequest(url: URL(string: fullUrl)!)
+
         
-    
+        cell.posterView.setImageWith(
+            imageRequest,
+            placeholderImage: nil,
+            success: { (imageRequest, imageResponse, image) -> Void in
+                
+                if imageResponse != nil {
+                    cell.posterView.alpha = 0.0
+                    cell.posterView.image = image
+                    UIView.animate(withDuration: 0.4, animations: { () -> Void in
+                        cell.posterView.alpha = 1.0
+                    })
+                } else {
+                    cell.posterView.image = image
+                }
+            },
+            failure: { (imageRequest, imageResponse, error) -> Void in
+                print("image was not loaded")
+        })
+        
+        
         cell.titleLabel.text = title
         cell.descrLabel.text = description
-        cell.posterView.setImageWith(fullUrl!)
+        
+        
+        
         return cell
     }
     
@@ -214,8 +236,27 @@ extension MoviesViewController: UICollectionViewDataSource {
         let movie = movies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
         let imageURL = movie["poster_path"] as! String
-        let fullURL = URL(string: baseURL + imageURL)
-        cell.posterImage.setImageWith(fullURL!)
+        let fullURL = baseURL + imageURL
+        let imageRequest = URLRequest(url: URL(string: fullURL)!)
+        
+        cell.posterImage.setImageWith(
+            imageRequest,
+            placeholderImage: nil,
+            success: { (imageRequest, imageResponse, image) -> Void in
+                
+                if imageResponse != nil {
+                    cell.posterImage.alpha = 0.0
+                    cell.posterImage.image = image
+                    UIView.animate(withDuration: 0.4, animations: { () -> Void in
+                        cell.posterImage.alpha = 1.0
+                    })
+                } else {
+                    cell.posterImage.image = image
+                }
+            },
+            failure: { (imageRequest, imageResponse, error) -> Void in
+                print("image was not loaded")
+        })
         return cell
     }
 }

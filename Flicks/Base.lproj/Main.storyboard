@@ -150,6 +150,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="grid" width="32" height="32"/>
+        <image name="grid" width="24" height="24"/>
     </resources>
 </document>

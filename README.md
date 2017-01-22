@@ -17,13 +17,15 @@ The following **optional** features are implemented:
 
 - [√] User sees an error message when there's a networking error.
 - [√] Movies are displayed using a CollectionView instead of a TableView.
-- [ ] User can search for a movie.
+- [√] User can search for a movie.
 - [√] All images fade in as they are loading.
 - [ ] Customize the UI.
 
 The following **additional** features are implemented:
 
 - [√] Give the user the ability to choose between both TableView and CollectionView
+- [√] Added an App Icon
+
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 

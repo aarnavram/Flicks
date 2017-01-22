@@ -16,6 +16,7 @@ class CollectionViewController: UIViewController {
     let refreshControl = UIRefreshControl()
     var movies:[NSDictionary]?
     @IBOutlet weak var collectionView: UICollectionView!
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class CollectionViewController: UIViewController {
         collectionView.insertSubview(refreshControl, at: 0)
         refreshControlAction(refreshControl: refreshControl)
         configureLayout()
+        defaults.set(0, forKey: "currentView") //use 0 for tableView
         // Do any additional setup after loading the view.
 
     }

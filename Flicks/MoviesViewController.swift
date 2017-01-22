@@ -12,25 +12,55 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
+    
     var movies: [NSDictionary]?
     let errorBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 600, height: 50))
     let refreshControl = UIRefreshControl()
+    let refreshControlTwo = UIRefreshControl()
+    let defaults = UserDefaults.standard
 
+    @IBOutlet weak var changeViewButton: UIBarButtonItem!
     
     override func viewDidLoad() {
+        
+
         super.viewDidLoad()
+        
+        collectionView.dataSource = self
+        collectionView.isHidden = true
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isHidden = true
+        configureLayout()
+        tableView.contentInset = UIEdgeInsetsMake(65,0,0,0);
 
         // Do any additional setup after loading the view.
         
         confirgureErrorButton()
+        
         refreshControl.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
-        tableView.insertSubview(refreshControl, at: 0)
-        refreshControlAction(refreshControl: refreshControl)
+        refreshControlTwo.addTarget(self, action: #selector(refreshControlAction(refreshControl:)), for: UIControlEvents.valueChanged)
+        
+        collectionView.insertSubview(refreshControl, at: 0)
+        tableView.insertSubview(refreshControlTwo, at: 0)
 
+        refreshControlAction(refreshControl: refreshControl)
+        
+        
+        //defaults.set(0, forKey: "currentView") //use 0 for tableView
+        
+        if defaults.object(forKey: "currentView") != nil {
+            if defaults.value(forKey: "currentView") as! Int == 0 {
+                changeViewButton.image = UIImage(named: "grid")
+            } else {
+                changeViewButton.image = UIImage(named: "list")
+            }
+        } else {
+            defaults.set(0, forKey: "currentView")
+        }
+        
         
     }
     
@@ -40,6 +70,22 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    @IBAction func onViewChanged(_ sender: AnyObject) {
+        if defaults.value(forKey: "currentView") as! Int == 0 {
+            defaults.set(1, forKey: "currentView")
+            changeViewButton.image = UIImage(named: "list")
+            buttonCall()
+            print("changed")
+        } else {
+            defaults.set(0, forKey: "currentView")
+            changeViewButton.image = UIImage(named: "grid")
+            buttonCall()
+            print("Changed")
+        }
+    }
+    
     
     func confirgureErrorButton() {
         self.view.addSubview(errorBtn)
@@ -64,6 +110,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         MBProgressHUD.hide(for: self.view, animated: true)
     }
     
+
+    
+    
+    
     func refreshControlAction(refreshControl: UIRefreshControl) {
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
@@ -77,7 +127,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     self.movies = dataDictionary["results"] as? [NSDictionary]
                     self.errorBtn.isHidden = true
                     self.tableView.reloadData()
-                    self.tableView.isHidden = false
+                    self.collectionView.reloadData()
+                    if self.defaults.value(forKey: "currentView") as! Int == 0 {
+                        self.collectionView.isHidden = true
+                        self.tableView.isHidden = false
+                    } else {
+                        self.tableView.isHidden = true
+                        self.collectionView.isHidden = false
+                    }
                     refreshControl.endRefreshing()
                 }
             } else {
@@ -118,6 +175,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.posterView.setImageWith(fullUrl!)
         return cell
     }
+    
+    func configureLayout() {
+        
+        let leftAndRightPaddings: CGFloat = 5
+        let numberOfItemsPerRow: CGFloat = 2
+        
+        let bounds = UIScreen.main.bounds
+        let width = (bounds.size.width - leftAndRightPaddings*(numberOfItemsPerRow)) / numberOfItemsPerRow
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        let size = CGSize(width: width, height: 1.5*width)
+        layout.itemSize = size
+    }
 
     /*
     // MARK: - Navigation
@@ -129,4 +198,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     */
 
+}
+
+extension MoviesViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if let movies = movies {
+            return movies.count
+        } else {
+            return 0
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
+        let movie = movies![indexPath.row]
+        let baseURL = "https://image.tmdb.org/t/p/w342"
+        let imageURL = movie["poster_path"] as! String
+        let fullURL = URL(string: baseURL + imageURL)
+        cell.posterImage.setImageWith(fullURL!)
+        return cell
+    }
 }

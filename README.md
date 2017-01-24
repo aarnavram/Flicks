@@ -32,7 +32,7 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. The best way to implement both Collection View and Table View in your app
+1. The best way to implement both Collection View and Table View in your app simultaneously
 2. What kind of UI people prefer in their apps
 
 ## Video Walkthrough 

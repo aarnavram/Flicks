@@ -138,7 +138,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     print(dataDictionary)
                     self.movies = dataDictionary["results"] as? [NSDictionary]
-                    self.filteredMovies = NSArray(array: self.movies!, copyItems: true) as! [NSDictionary]
+                    self.filteredMovies = NSArray(array: self.movies!, copyItems: true) as? [NSDictionary]
                     self.filteredMovies = self.movies
                     self.errorBtn.isHidden = true
                     self.tableView.reloadData()
@@ -183,7 +183,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         } else {
             results = self.movies
         }
-        filteredMovies = NSArray(array: results!) as! [NSDictionary]
+        filteredMovies = NSArray(array: results!) as? [NSDictionary]
         tableView.reloadData()
         collectionView.reloadData()
         
@@ -247,15 +247,16 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         layout.itemSize = size
     }
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
     }
-    */
+    
 
 }
 

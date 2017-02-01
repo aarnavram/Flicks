@@ -66,18 +66,23 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         
     }
-    
-
-    @IBAction func whenViewTapped(_ sender: AnyObject) {
-        self.searchBar.endEditing(true)
-    }
-    
+        
     
     func configureSearchBar() {
         searchBar.delegate = self
         searchBar.placeholder = "Search for a movie"
         searchBar.showsCancelButton = false
         self.navigationItem.titleView = searchBar
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -254,6 +259,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        searchBar.resignFirstResponder()
+        if defaults.value(forKey: "currentView") as! Int == 0 {
+            let cell = sender as! UITableViewCell
+            let indexPath = tableView.indexPath(for: cell)
+            let thisMovie = movies![indexPath!.row]
+            
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.movie = thisMovie
+        } else {
+            let cell = sender as! UICollectionViewCell
+            let indexPath = collectionView.indexPath(for: cell)
+            let thisMovie = movies![indexPath!.row]
+            
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.movie = thisMovie
+
+            
+        }
         
     }
     

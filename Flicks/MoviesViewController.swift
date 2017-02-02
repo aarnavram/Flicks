@@ -14,6 +14,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
+
     
     var movies: [NSDictionary]?
     var filteredMovies: [NSDictionary]?
@@ -29,7 +30,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
 
         super.viewDidLoad()
-                
+        //self.navigationController?.navigationBar.barTintColor = UIColor.black
+        //self.navigationController?.navigationBar.alpha = 0.50
         configureSearchBar()
         collectionView.dataSource = self
         collectionView.isHidden = true
@@ -198,47 +200,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
      //   return true
     //}
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
-        
-        //let movie = movies![indexPath.row]
-        let movie = filteredMovies![indexPath.row]
-        let title = movie["title"] as! String
-        let description = movie["overview"] as! String
-        let baseUrl = "https://image.tmdb.org/t/p/w342"
-        let imageUrl = movie["poster_path"] as! String
-        
-        let fullUrl = baseUrl + imageUrl
-        let imageRequest = URLRequest(url: URL(string: fullUrl)!)
 
-        
-        cell.posterView.setImageWith(
-            imageRequest,
-            placeholderImage: nil,
-            success: { (imageRequest, imageResponse, image) -> Void in
-                
-                if imageResponse != nil {
-                    cell.posterView.alpha = 0.0
-                    cell.posterView.image = image
-                    UIView.animate(withDuration: 0.4, animations: { () -> Void in
-                        cell.posterView.alpha = 1.0
-                    })
-                } else {
-                    cell.posterView.image = image
-                }
-            },
-            failure: { (imageRequest, imageResponse, error) -> Void in
-                print("image was not loaded")
-        })
-        
-        
-        cell.titleLabel.text = title
-        cell.descrLabel.text = description
-        
-        
-        
-        return cell
-    }
     
     func configureLayout() {
         
@@ -280,6 +242,48 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
+        //let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
+        let title = movie["title"] as! String
+        let description = movie["overview"] as! String
+        
+        let baseUrl = "https://image.tmdb.org/t/p/w342"
+        
+        if let imageUrl = movie["poster_path"] as? String {
+            let fullUrl = baseUrl + imageUrl
+            let imageRequest = URLRequest(url: URL(string: fullUrl)!)
+            cell.posterView.setImageWith(
+                imageRequest,
+                placeholderImage: nil,
+                success: { (imageRequest, imageResponse, image) -> Void in
+                
+                    if imageResponse != nil {
+                        cell.posterView.alpha = 0.0
+                        cell.posterView.image = image
+                        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+                            cell.posterView.alpha = 1.0
+                        })
+                    } else {
+                        cell.posterView.image = image
+                    }
+                },
+                failure: { (imageRequest, imageResponse, error) -> Void in
+                    print("image was not loaded")
+            })
+        }
+        
+        
+        cell.titleLabel.text = title
+        cell.descrLabel.text = description
+        
+        
+        
+        return cell
+    }
+    
 
 }
 
@@ -296,7 +300,7 @@ extension MoviesViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
         let movie = filteredMovies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
-        let imageURL = movie["poster_path"] as! String
+        if let imageURL = movie["poster_path"] as? String {
         let fullURL = baseURL + imageURL
         let imageRequest = URLRequest(url: URL(string: fullURL)!)
         
@@ -318,6 +322,7 @@ extension MoviesViewController: UICollectionViewDataSource {
             failure: { (imageRequest, imageResponse, error) -> Void in
                 print("image was not loaded")
         })
+        }
         return cell
     }
 }

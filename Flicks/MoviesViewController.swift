@@ -88,6 +88,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         self.searchBar.showsCancelButton = true
     }
     
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = false
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         searchBar.text = ""
@@ -251,6 +255,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
+//        let backgroundView = UIView()
+//        backgroundView.backgroundColor = UIColor.blue
+//        cell.selectedBackgroundView = backgroundView
         
         //let movie = movies![indexPath.row]
         let movie = filteredMovies![indexPath.row]

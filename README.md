@@ -19,7 +19,7 @@ The following **optional** features are implemented:
 - [√] Movies are displayed using a CollectionView instead of a TableView.
 - [√] User can search for a movie.
 - [√] All images fade in as they are loading.
-- [ ] Customize the UI.
+- [√] Customize the UI.
 
 The following **additional** features are implemented:
 

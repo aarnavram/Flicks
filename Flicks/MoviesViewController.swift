@@ -179,13 +179,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
     
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = filteredMovies { //changed to filteredMovies
-            return movies.count
-        } else {
-            return 0
-        }
-    }
+
     
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -253,6 +247,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
     }
     
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let movies = filteredMovies { //changed to filteredMovies
+            return movies.count
+        } else {
+            return 0
+        }
+    }
+    
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
@@ -315,6 +317,7 @@ extension MoviesViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
         let movie = filteredMovies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
+        
         if let imageURL = movie["poster_path"] as? String {
         let fullURL = baseURL + imageURL
         let imageRequest = URLRequest(url: URL(string: fullURL)!)

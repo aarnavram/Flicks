@@ -28,24 +28,54 @@ class DetailViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         
-        let baseUrl = "https://image.tmdb.org/t/p/w342"
+        let baseUrlLowRes = "https://image.tmdb.org/t/p/w45"
+        let baseUrlHighRes = "https://image.tmdb.org/t/p/original"
         
         if let imageUrl = movie["poster_path"] as? String {
-            let fullUrl = baseUrl + imageUrl
-            let imageRequest = URLRequest(url: URL(string: fullUrl)!)
+            let lowFullUrl = baseUrlLowRes + imageUrl
+            let HighFullUrl = baseUrlHighRes + imageUrl
+            let smallImageRequest = URLRequest(url: URL(string: lowFullUrl)!)
+            let largeImageRequest = URLRequest(url: URL(string: HighFullUrl)!)
+            
             posterImageView.setImageWith(
-                imageRequest,
+                smallImageRequest,
                 placeholderImage: nil,
-                success: { (imageRequest, imageResponse, image) -> Void in
+                success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
                     
-                    if imageResponse != nil {
+                    if smallImageResponse != nil {
                         self.posterImageView.alpha = 0.0
-                        self.posterImageView.image = image
-                        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+                        self.posterImageView.image = smallImage
+                        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+                            
                             self.posterImageView.alpha = 1.0
+                            
+                            }, completion: { (sucess) -> Void in
+
+                                self.posterImageView.setImageWith(
+                                    largeImageRequest,
+                                    placeholderImage: smallImage,
+                                    success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                                        
+                                        self.posterImageView.image = largeImage;
+                                        
+                                    },
+                                    failure: { (request, response, error) -> Void in
+                                        self.posterImageView.image = smallImage
+                                })
                         })
+                        
                     } else {
-                        self.posterImageView.image = image
+                        self.posterImageView.setImageWith(
+                            largeImageRequest,
+                            placeholderImage: smallImage,
+                            success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                                
+                                self.posterImageView.image = largeImage;
+                                
+                            },
+                            failure: { (request, response, error) -> Void in
+                                self.posterImageView.image = smallImage
+                        })
                     }
                 },
                 failure: { (imageRequest, imageResponse, error) -> Void in

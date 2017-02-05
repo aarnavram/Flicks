@@ -19,9 +19,12 @@ class DetailViewController: UIViewController {
     var movie: NSDictionary!
     
     override func viewDidLoad() {
+        self.navigationController?.navigationBar.barStyle = .blackTranslucent
+        
         super.viewDidLoad()
+        scrollView.backgroundColor = UIColor.clear
+        self.scrollView.layer.allowsGroupOpacity = false
         scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
-        scrollView.backgroundColor = UIColor.black
         
         titleLabel.text = movie["title"] as? String
         overviewLabel.text = movie["overview"] as? String

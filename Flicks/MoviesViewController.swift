@@ -33,6 +33,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
 
         super.viewDidLoad()
+        
+//        self.navigationController?.navigationBar.barStyle = .blackTranslucent
+//        tableView.backgroundColor = UIColor.black
+//        collectionView.backgroundColor = UIColor.black
+        
         //self.navigationController?.navigationBar.barTintColor = UIColor.black
         //self.navigationController?.navigationBar.alpha = 0.50
         configureSearchBar()
@@ -341,6 +346,7 @@ extension MoviesViewController: UICollectionViewDataSource {
                 print("image was not loaded")
         })
         }
+        //cell.backgroundColor = UIColor.black
         return cell
     }
 }

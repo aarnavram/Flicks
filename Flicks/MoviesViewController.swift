@@ -33,7 +33,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
 
         super.viewDidLoad()
-        
         tableView.backgroundColor = UIColor.black
         collectionView.backgroundColor = UIColor.black
         
@@ -290,14 +289,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-//        let backgroundView = UIView()
-//        backgroundView.backgroundColor = UIColor.blue
-//        cell.selectedBackgroundView = backgroundView
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(colorLiteralRed: 33/255, green: 33/255, blue: 33/255, alpha: 1)
+        cell.selectedBackgroundView = backgroundView
         
         //let movie = movies![indexPath.row]
         cell.backgroundColor = UIColor.black
+        
+
 
         let movie = filteredMovies![indexPath.row]
+        let rating = movie["vote_average"] as! Double
+        let labelRating = Double(round(1000*rating)/1000)
+        cell.ratingLabel.text = "⭐️ \(labelRating)"
+        cell.ratingLabel.textColor = UIColor.white
         let title = movie["title"] as! String
         let description = movie["overview"] as! String
         let baseUrl = "https://image.tmdb.org/t/p/w342"
@@ -346,11 +351,22 @@ extension MoviesViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(colorLiteralRed: 33/255, green: 33/255, blue: 33/255, alpha: 1)
+        cell.selectedBackgroundView = backgroundView
         cell.contentView.layer.borderWidth = 2
         cell.contentView.layer.borderColor = UIColor.white.cgColor
         let movie = filteredMovies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
+        
+        let rating = movie["vote_average"] as! Double
+        let labelRating = Double(round(1000*rating)/1000)
+        cell.ratingLabel.text = "⭐️ \(labelRating)"
+        cell.ratingLabel.textColor = UIColor.white
         
         if let imageURL = movie["poster_path"] as? String {
         let fullURL = baseURL + imageURL

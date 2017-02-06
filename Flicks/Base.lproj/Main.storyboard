@@ -40,16 +40,26 @@
                                                         <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
                                                     </accessibility>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="RatingCollec" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3X5-Ie-ytl">
+                                                    <frame key="frameInset" minX="5" minY="171" width="159" height="21"/>
+                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                         </view>
                                         <constraints>
                                             <constraint firstItem="VFw-e0-NeJ" firstAttribute="top" secondItem="fSa-75-pND" secondAttribute="topMargin" id="04M-kR-HyB"/>
                                             <constraint firstItem="VFw-e0-NeJ" firstAttribute="leading" secondItem="fSa-75-pND" secondAttribute="leadingMargin" id="6gH-QP-q60"/>
-                                            <constraint firstItem="VFw-e0-NeJ" firstAttribute="bottom" secondItem="fSa-75-pND" secondAttribute="bottomMargin" id="Spq-F7-AVN"/>
+                                            <constraint firstItem="3X5-Ie-ytl" firstAttribute="leading" secondItem="fSa-75-pND" secondAttribute="leading" constant="8" id="JhX-F3-NQs"/>
+                                            <constraint firstItem="VFw-e0-NeJ" firstAttribute="bottom" secondItem="fSa-75-pND" secondAttribute="bottomMargin" constant="-20" id="Spq-F7-AVN"/>
                                             <constraint firstItem="VFw-e0-NeJ" firstAttribute="trailing" secondItem="fSa-75-pND" secondAttribute="trailingMargin" id="bAh-rD-gwD"/>
+                                            <constraint firstAttribute="bottom" secondItem="3X5-Ie-ytl" secondAttribute="bottom" constant="8" id="cPW-IP-Rl4"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="posterImage" destination="VFw-e0-NeJ" id="Eyp-q7-CPp"/>
+                                            <outlet property="ratingLabel" destination="3X5-Ie-ytl" id="G58-EW-dd1"/>
                                             <segue destination="7sS-R5-Ms4" kind="show" id="cMP-kD-EAK"/>
                                         </connections>
                                     </collectionViewCell>
@@ -58,15 +68,15 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="122" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="D0p-Hw-6zV">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieCell" rowHeight="122" id="c3c-mV-DXG" customClass="MovieCell" customModule="Flicks" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="122"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieCell" rowHeight="130" id="c3c-mV-DXG" customClass="MovieCell" customModule="Flicks" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="c3c-mV-DXG" id="Uyu-r0-Xez">
-                                            <frame key="frameInset" width="375" height="122"/>
+                                            <frame key="frameInset" width="375" height="129"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PSW-Fs-hld">
-                                                    <frame key="frameInset" minX="88" width="287" height="21"/>
+                                                    <frame key="frameInset" minX="88" width="287" height="20"/>
                                                     <accessibility key="accessibilityConfiguration">
                                                         <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                                     </accessibility>
@@ -91,6 +101,13 @@
                                                         <constraint firstAttribute="width" constant="80" id="weY-Ke-NWF"/>
                                                     </constraints>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oX3-KV-9xT">
+                                                    <frame key="frameInset" minX="88" minY="21" width="359" height="10"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="V0s-Ms-twW" firstAttribute="top" secondItem="PSW-Fs-hld" secondAttribute="bottom" constant="8" id="7jD-T2-cat"/>
@@ -108,6 +125,7 @@
                                         <connections>
                                             <outlet property="descrLabel" destination="V0s-Ms-twW" id="ftw-Xf-Lk8"/>
                                             <outlet property="posterView" destination="Dk8-vt-zhQ" id="36l-rB-kzo"/>
+                                            <outlet property="ratingLabel" destination="oX3-KV-9xT" id="Tvm-iL-pdR"/>
                                             <outlet property="titleLabel" destination="PSW-Fs-hld" id="f4R-rx-RiF"/>
                                             <segue destination="7sS-R5-Ms4" kind="show" id="01d-eX-qYZ"/>
                                         </connections>
@@ -144,7 +162,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="990" y="36"/>
+            <point key="canvasLocation" x="989.60000000000002" y="35.532233883058474"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="9zn-Af-ISM">

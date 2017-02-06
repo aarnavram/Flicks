@@ -10,5 +10,6 @@ import UIKit
 
 class MovieCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var posterImage: UIImageView!
 }

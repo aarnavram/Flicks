@@ -76,7 +76,7 @@ The following **required** functionality is completed:
 
 - [√] User can view movie details by tapping on a cell.
 - [√] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
-- [ ] Customize the selection effect of the cell.
+- [√] Customize the selection effect of the cell.
 
 The following **optional** features are implemented:
 
@@ -86,11 +86,14 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [√] Ability to play the trailer of each movie in Now Playing or Top Rated
+- [√] Ability movie ratings to both tableView and collectionView
+
+
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. 
-2. 
+1. Using Autolayout with scroll views
+2. Best Color Schemes to use within an app when you want a dark theme/ light theme
 
 ## Video Walkthrough 
 

@@ -15,16 +15,24 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var overviewLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var infoView: UIView!
+    @IBOutlet weak var videoView: UIWebView!
+    var videoID = "" //change this 
     
     var movie: NSDictionary!
     
     override func viewDidLoad() {
+
+        
+        videoView.allowsInlineMediaPlayback = true
+        videoView.backgroundColor = UIColor.black
+        videoView.loadHTMLString("<iframe id=\"ytplayer\" type=\"text/html\" width=\"360\" height=\"195\" src=\"https://www.youtube.com/embed/\(videoID)?autoplay=1\" frameborder=\"0\"></iframe>", baseURL: nil)
+        
         self.navigationController?.navigationBar.barStyle = .blackTranslucent
         
         super.viewDidLoad()
         scrollView.backgroundColor = UIColor.clear
         self.scrollView.layer.allowsGroupOpacity = false
-        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height)
+        scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height + videoView.frame.size.height + 50)
         
         titleLabel.text = movie["title"] as? String
         overviewLabel.text = movie["overview"] as? String
@@ -91,6 +99,7 @@ class DetailViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
 
     /*

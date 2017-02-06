@@ -159,7 +159,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let data = data {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
+                    //print(dataDictionary)
                     self.movies = dataDictionary["results"] as? [NSDictionary]
                     self.filteredMovies = NSArray(array: self.movies!, copyItems: true) as? [NSDictionary]
                     self.filteredMovies = self.movies

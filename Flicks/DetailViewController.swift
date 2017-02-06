@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+
 
 class DetailViewController: UIViewController {
 
@@ -17,19 +19,35 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var infoView: UIView!
     @IBOutlet weak var videoView: UIWebView!
     var videoID = "" //change this 
-    
+
     var movie: NSDictionary!
     
     override func viewDidLoad() {
 
         
+        super.viewDidLoad()
+        
+        
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let movieID = movie["id"] as? NSNumber
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieID!)/videos?api_key=\(apiKey)&language=en-US")!
+        
+        Alamofire.request(url).responseJSON { response in
+            if let reponseJSON = response.result.value {
+                print("JSON: \(reponseJSON)")
+                let JSON = reponseJSON as! NSDictionary
+                let results = JSON.value(forKeyPath: "results") as! [NSDictionary]
+                self.videoID = results[0].value(forKeyPath: "key") as! String
+                self.videoView.loadHTMLString("<iframe id=\"ytplayer\" type=\"text/html\" width=\"360\" height=\"195\" src=\"https://www.youtube.com/embed/\(self.videoID)?autoplay=1\" frameborder=\"0\"></iframe>", baseURL: nil)
+                print(self.videoID)
+            }
+        }
+        
         videoView.allowsInlineMediaPlayback = true
         videoView.backgroundColor = UIColor.black
-        videoView.loadHTMLString("<iframe id=\"ytplayer\" type=\"text/html\" width=\"360\" height=\"195\" src=\"https://www.youtube.com/embed/\(videoID)?autoplay=1\" frameborder=\"0\"></iframe>", baseURL: nil)
+        
         
         self.navigationController?.navigationBar.barStyle = .blackTranslucent
-        
-        super.viewDidLoad()
         scrollView.backgroundColor = UIColor.clear
         self.scrollView.layer.allowsGroupOpacity = false
         scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height + videoView.frame.size.height + 50)

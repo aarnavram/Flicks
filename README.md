@@ -81,11 +81,11 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [√] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
-- [ ] Customize the navigation bar.
+- [√] Customize the navigation bar.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [√] Ability to play the trailer of each movie in Now Playing or Top Rated
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 

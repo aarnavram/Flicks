@@ -34,9 +34,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         super.viewDidLoad()
         
-//        self.navigationController?.navigationBar.barStyle = .blackTranslucent
-//        tableView.backgroundColor = UIColor.black
-//        collectionView.backgroundColor = UIColor.black
+        tableView.backgroundColor = UIColor.black
+        collectionView.backgroundColor = UIColor.black
         
         //self.navigationController?.navigationBar.barTintColor = UIColor.black
         //self.navigationController?.navigationBar.alpha = 0.50
@@ -296,6 +295,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 //        cell.selectedBackgroundView = backgroundView
         
         //let movie = movies![indexPath.row]
+        cell.backgroundColor = UIColor.black
+
         let movie = filteredMovies![indexPath.row]
         let title = movie["title"] as! String
         let description = movie["overview"] as! String
@@ -346,6 +347,8 @@ extension MoviesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCollectionViewCell", for: indexPath) as! MovieCollectionViewCell
+        cell.contentView.layer.borderWidth = 2
+        cell.contentView.layer.borderColor = UIColor.white.cgColor
         let movie = filteredMovies![indexPath.row]
         let baseURL = "https://image.tmdb.org/t/p/w342"
         

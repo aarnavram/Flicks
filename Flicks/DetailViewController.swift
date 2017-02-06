@@ -47,7 +47,7 @@ class DetailViewController: UIViewController {
         videoView.backgroundColor = UIColor.black
         
         
-        self.navigationController?.navigationBar.barStyle = .blackTranslucent
+        self.navigationController?.navigationBar.barStyle = .default
         scrollView.backgroundColor = UIColor.clear
         self.scrollView.layer.allowsGroupOpacity = false
         scrollView.contentSize = CGSize(width: scrollView.frame.size.width, height: infoView.frame.origin.y + infoView.frame.size.height + videoView.frame.size.height + 50)

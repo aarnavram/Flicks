@@ -68,7 +68,7 @@ limitations under the License.
 
 **Flicks** is a movies app displaying box office and top rental DVDs using [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **2** hours spent in total
+Time spent: **8** hours spent in total
 
 ## User Stories
 
@@ -86,7 +86,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [√] Ability to play the trailer of each movie in Now Playing or Top Rated
-- [√] Ability movie ratings to both tableView and collectionView
+- [√] Movie ratings to both tableView and collectionView
 
 
 

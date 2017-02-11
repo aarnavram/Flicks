@@ -226,26 +226,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     
     
-//    func getLinkID(movieID: NSNumber) {
-//        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-//        let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieID)/videos?api_key=\(apiKey)&language=en-US")!
-//        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-//        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-//        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-//            if let data = data {
-//                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-//                    var results = dataDictionary["results"] as? [NSDictionary]
-//                    print("hellohere")
-//                    print(results)
-//                    self.linkID = results?[0].value(forKeyPath: "key") as! String
-//                    
-//                }
-//            } else {
-//                print("Could not get ID")
-//            }
-//        }
-//        task.resume()
-//    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
